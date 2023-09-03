@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     public bool isRolling;
     public GameObject gun;
     Vector3 lookPos;
+    public Joystick Joystick;
 
 
     public GameObject Crosshair;
@@ -45,8 +46,8 @@ public class PlayerController : MonoBehaviour
 
         }
         //gets the vertical and horizontal inputs of the player and stores it in floats
-        float verticalInput = Input.GetAxisRaw("Vertical");
-        float horizontalInput = Input.GetAxisRaw("Horizontal");
+        float verticalInput = Joystick.Vertical;
+        float horizontalInput = Joystick.Horizontal;
         Vector3 direction = new Vector3(horizontalInput, 0f, verticalInput).normalized;
 
 
