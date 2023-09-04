@@ -46,6 +46,7 @@ public class PlayerController : MonoBehaviour
 
         }
         //gets the vertical and horizontal inputs of the player and stores it in floats
+
         float verticalInput = Joystick.Vertical;
         float horizontalInput = Joystick.Horizontal;
         Vector3 direction = new Vector3(horizontalInput, 0f, verticalInput).normalized;
