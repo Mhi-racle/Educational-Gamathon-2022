@@ -16,7 +16,7 @@ public class Shooting : MonoBehaviour
     public int maxAmmo;
     public static bool isReloading;
     public TextMeshProUGUI ammoText;
-    public GameObject questionPanel;
+    
     public PlayerController playerController;
     public Animator playerAnimator;
     public GameObject gun;
@@ -28,9 +28,6 @@ public class Shooting : MonoBehaviour
     void Start()
     {
 
-
-
-        questionPanel.SetActive(false);
         isReloading = false; //disable the question panel
         currentAmmo = maxAmmo;
 
@@ -48,16 +45,7 @@ public class Shooting : MonoBehaviour
 
         if (Input.GetButtonDown("Fire1"))
         {
-            //shoots only if the currentAmmo is more than zero and the player is not reloading
-            if (currentAmmo > 0 && !isReloading && !playerController.isRolling && !MenusManger.isPaused)
-            {
-                // gunShot.time = .8f;
-                gunShot.PlayOneShot(gunShot.clip, 0.3f);
-                Shoot();
-                currentAmmo--;
-                muzzleShot.Play();
-            }
-
+            Shoot();
         }
 
         //check is Ammo is less than 0, if it is, it calls the reloading script
@@ -79,10 +67,19 @@ public class Shooting : MonoBehaviour
 
     }
 
-    void Shoot()
+    public void Shoot()
     {
+        //shoots only if the currentAmmo is more than zero and the player is not reloading
+        if (currentAmmo > 0 && !isReloading && !playerController.isRolling && !MenusManger.isPaused)
+        {
+            // gunShot.time = .8f;
+            gunShot.PlayOneShot(gunShot.clip, 0.3f);
+            GameObject bullet = Instantiate(bulletPrefab, bullerSpawnPoint.transform.position, transform.rotation);
+            currentAmmo--;
+            muzzleShot.Play();
+        }
 
-        GameObject bullet = Instantiate(bulletPrefab, bullerSpawnPoint.transform.position, transform.rotation);
+       
 
     }
 

@@ -47,44 +47,90 @@ public class PlayerController : MonoBehaviour
         }
         //gets the vertical and horizontal inputs of the player and stores it in floats
 
-        float verticalInput = Joystick.Vertical;
-        float horizontalInput = Joystick.Horizontal;
-        Vector3 direction = new Vector3(horizontalInput, 0f, verticalInput).normalized;
-
-
-        //if the direction is greater than zero
-        if (direction.magnitude >= 0.1f)
+        if(Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
         {
-            //if player is moving, then play the rolling animation and also set isRolling to true
-            //isRolling notifies the shooting script so that it doesnt shoot when the player is rolling
-            playerAnimator.SetBool("isRolling", true);
-            isRolling = true;
+            float verticalInput = Joystick.Vertical;
+            float horizontalInput = Joystick.Horizontal;
+            Vector3 direction = new Vector3(horizontalInput, 0f, verticalInput).normalized;
 
-            //disables the gun
-            gun.SetActive(false);
-            //calculates the target angle to be rotated to 
-            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.transform.eulerAngles.y;
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothSpeed);
-            transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
-            //moves the player in the direction of the camera
-            Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-            controller.Move(moveDirection.normalized * speed * Time.deltaTime);
-            // rb.AddForce(moveDirection * speed);
-
-        }
-        //if the player is not moving, the rolling stops and isRolling is set to false
-        else
-        {
-            //enable the gun if the player is stagnant and is not reloading
-            // StartCoroutine(showGun());
-            if (!Shooting.isReloading)
+            //if the direction is greater than zero
+            if (direction.magnitude >= 0.1f)
             {
-                gun.SetActive(true);
-                playerAnimator.SetBool("isRolling", false);
-                isRolling = false;
+                //if player is moving, then play the rolling animation and also set isRolling to true
+                //isRolling notifies the shooting script so that it doesnt shoot when the player is rolling
+                playerAnimator.SetBool("isRolling", true);
+                isRolling = true;
+
+                //disables the gun
+                gun.SetActive(false);
+                //calculates the target angle to be rotated to 
+                float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.transform.eulerAngles.y;
+                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothSpeed);
+                transform.rotation = Quaternion.Euler(0f, angle, 0f);
+
+                //moves the player in the direction of the camera
+                Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+                controller.Move(moveDirection.normalized * speed * Time.deltaTime);
+                // rb.AddForce(moveDirection * speed);
+
+            }
+            //if the player is not moving, the rolling stops and isRolling is set to false
+            else
+            {
+                //enable the gun if the player is stagnant and is not reloading
+                // StartCoroutine(showGun());
+                if (!Shooting.isReloading)
+                {
+                    gun.SetActive(true);
+                    playerAnimator.SetBool("isRolling", false);
+                    isRolling = false;
+                }
+
             }
 
+        }
+        else
+        {
+            float verticalInput = Input.GetAxis("Vertical");
+            float horizontalInput = Input.GetAxis("Horizontal");
+            Vector3 direction = new Vector3(horizontalInput, 0f, verticalInput).normalized;
+
+
+            //if the direction is greater than zero
+            if (direction.magnitude >= 0.1f)
+            {
+                //if player is moving, then play the rolling animation and also set isRolling to true
+                //isRolling notifies the shooting script so that it doesnt shoot when the player is rolling
+                playerAnimator.SetBool("isRolling", true);
+                isRolling = true;
+
+                //disables the gun
+                gun.SetActive(false);
+                //calculates the target angle to be rotated to 
+                float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.transform.eulerAngles.y;
+                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothSpeed);
+                transform.rotation = Quaternion.Euler(0f, angle, 0f);
+
+                //moves the player in the direction of the camera
+                Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+                controller.Move(moveDirection.normalized * speed * Time.deltaTime);
+                // rb.AddForce(moveDirection * speed);
+
+            }
+            //if the player is not moving, the rolling stops and isRolling is set to false
+            else
+            {
+                //enable the gun if the player is stagnant and is not reloading
+                // StartCoroutine(showGun());
+                if (!Shooting.isReloading)
+                {
+                    gun.SetActive(true);
+                    playerAnimator.SetBool("isRolling", false);
+                    isRolling = false;
+                }
+
+            }
         }
 
         //makes the player look at the position of the mouse
